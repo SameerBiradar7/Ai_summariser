@@ -280,9 +280,9 @@ Mini-summary (80-120 words):
 You are an expert editor. Using ONLY the combined mini-summaries below, produce a final structured summary.
 
 Requirements:
-- 8–12 short, meaningful headlines.
+- 10–15 short, meaningful headlines.
 - Under each headline write a substantive paragraph (100–160 words).
-- Finish with a "Conclusion" section (250–500 words).
+- Finish with a "Conclusion" section (350–500 words).
 - Base content only on the provided mini-summaries.
 Combined mini-summaries:
 {combined_text}
@@ -349,7 +349,7 @@ Context:
             print(f"[summarize] Direct summarization done in {time.perf_counter() - t0:.2f}s")
 
         # save final
-        summary_filename = f"{prefix}_summary.txt"
+        summary_filename = f"{prefix}_summary.md"
         if save_flag:
             out_path = OUTPUT_FOLDER / summary_filename
             out_path.write_text(final_text, encoding="utf-8")

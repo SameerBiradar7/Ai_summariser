@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Document Summariser</title>
+  <title>AI Document Summariser v5</title>
 
   <style>
     /* Reset + base */
@@ -11,102 +11,214 @@
     html,body{height:100%}
     body{
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-      background: linear-gradient(180deg,#0b2336 0%, #102b45 100%);
+      background: linear-gradient(135deg,#0a1628 0%, #1a2f4a 50%, #0d1b2e 100%);
+      background-attachment: fixed;
       color:#e6eef8;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       padding:28px;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Animated background particles */
+    body::before {
+      content: '';
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: radial-gradient(circle at 20% 50%, rgba(107, 184, 255, 0.03) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 80%, rgba(123, 92, 255, 0.03) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+      animation: shimmer 20s ease-in-out infinite;
+    }
+
+    @keyframes shimmer {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
     }
 
     .wrap{
       max-width:1200px;
       margin:0 auto;
+      position: relative;
+      z-index: 1;
     }
 
     header.hero{
-      background: rgba(255,255,255,0.04);
-      border-radius:10px;
-      padding:26px 28px;
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.08) 0%, rgba(123, 92, 255, 0.08) 100%);
+      backdrop-filter: blur(20px);
+      border-radius:16px;
+      padding:32px 36px;
       text-align:center;
-      margin-bottom:20px;
-      box-shadow: 0 10px 30px rgba(2,8,20,0.6);
+      margin-bottom:28px;
+      box-shadow: 0 20px 60px rgba(2,8,20,0.7),
+                  0 0 0 1px rgba(255,255,255,0.06),
+                  inset 0 1px 0 rgba(255,255,255,0.1);
       transform: translateY(-8px);
-      animation: floatIn 500ms ease both;
+      animation: floatIn 600ms ease both;
+      border: 1px solid rgba(255,255,255,0.05);
+      position: relative;
+      overflow: hidden;
     }
+
+    header.hero::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: linear-gradient(45deg, transparent, rgba(255,255,255,0.03), transparent);
+      animation: sweep 8s linear infinite;
+    }
+
+    @keyframes sweep {
+      0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+      100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+    }
+
     header.hero h1{
-      font-size:36px;
+      font-size:42px;
       color:#fff;
-      font-weight:600;
-      letter-spacing: -0.5px;
+      font-weight:700;
+      letter-spacing: -0.8px;
+      background: linear-gradient(135deg, #ffffff 0%, #a5d4ff 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      position: relative;
+      z-index: 1;
+      text-shadow: 0 2px 20px rgba(107, 184, 255, 0.3);
     }
     header.hero p{
-      color: rgba(230,238,248,0.8);
-      margin-top:8px;
-      font-size:14px;
+      color: rgba(230,238,248,0.85);
+      margin-top:12px;
+      font-size:15px;
+      position: relative;
+      z-index: 1;
     }
 
     .grid{
       display:grid;
-      grid-template-columns: 1fr 320px;
-      gap:22px;
+      grid-template-columns: 1fr 340px;
+      gap:24px;
       align-items:start;
     }
 
     /* Left big panel */
     .panel {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border-radius:12px;
-      padding:24px;
-      min-height:420px;
-      box-shadow: 0 18px 40px rgba(2,6,23,0.55);
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(16px);
+      border-radius:16px;
+      padding:28px;
+      min-height:480px;
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6),
+                  0 0 0 1px rgba(255,255,255,0.05);
       overflow:hidden;
       position:relative;
-      animation: slideInLeft 420ms ease both;
+      animation: slideInLeft 500ms ease both;
       display:flex;
       flex-direction:column;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.3s ease;
+    }
+
+    .panel:hover {
+      box-shadow: 0 25px 70px rgba(2,6,23,0.8),
+                  0 0 0 1px rgba(107, 184, 255, 0.15);
+      transform: translateY(-2px);
     }
 
     .section-title{
-      font-size:18px;
-      margin-bottom:8px;
-      color:#eaf4ff;
-      font-weight:600;
+      font-size:20px;
+      margin-bottom:10px;
+      color:#fff;
+      font-weight:700;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 10px rgba(107, 184, 255, 0.2);
     }
-    .muted{color:rgba(230,238,248,0.72);font-size:13px;margin-bottom:14px}
+    .muted{color:rgba(230,238,248,0.75);font-size:14px;margin-bottom:16px;line-height: 1.5}
 
     /* dropzone */
     .dropzone{
-      border-radius:12px;
-      border:2px dashed rgba(255,255,255,0.08);
-      padding:26px 20px;
-      margin-top:10px;
-      background: rgba(0,0,0,0.18);
+      border-radius:14px;
+      border:2px dashed rgba(107, 184, 255, 0.2);
+      padding:32px 24px;
+      margin-top:12px;
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.02), rgba(123, 92, 255, 0.02));
       display:flex;
       flex-direction:column;
-      gap:8px;
-      align-items:flex-start;
+      gap:10px;
+      align-items:center;
       justify-content:center;
-      transition: all 160ms ease;
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
       cursor:pointer;
+      position: relative;
+      overflow: hidden;
     }
+
+    .dropzone::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: radial-gradient(circle, rgba(107, 184, 255, 0.1), transparent);
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+      border-radius: 50%;
+    }
+
+    .dropzone:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
+    .dropzone:hover{
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.05), rgba(123, 92, 255, 0.05));
+      border-color:rgba(107, 184, 255, 0.4);
+      box-shadow:0 15px 40px rgba(107, 184, 255, 0.15),
+                 inset 0 1px 0 rgba(255,255,255,0.1);
+      transform: translateY(-2px);
+    }
+
     .dropzone.dragover{
-      background:rgba(124,199,255,0.12);
-      border-color:rgba(124,199,255,0.8);
-      box-shadow:0 10px 30px rgba(124,199,255,0.3);
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.15), rgba(123, 92, 255, 0.15));
+      border-color:rgba(107, 184, 255, 0.8);
+      box-shadow:0 20px 50px rgba(107, 184, 255, 0.3),
+                 inset 0 2px 0 rgba(255,255,255,0.2);
+      transform: scale(1.02);
     }
-    .dz-title{font-size:16px;font-weight:500}
-    .dz-sub{font-size:13px;color:rgba(230,238,248,0.8)}
-    .dz-file{font-size:13px;color:#dff1ff;margin-top:4px}
+    .dz-title{font-size:17px;font-weight:600;color:#fff;position: relative;z-index: 1}
+    .dz-sub{font-size:14px;color:rgba(230,238,248,0.85);position: relative;z-index: 1}
+    .dz-file{font-size:14px;color:#a5d4ff;margin-top:6px;font-weight:500;position: relative;z-index: 1}
 
     .browse-label{
       display:inline-block;
-      margin-top:8px;
-      padding:8px 12px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.2);
-      font-size:13px;
+      margin-top:10px;
+      padding:10px 18px;
+      border-radius:10px;
+      border:1px solid rgba(107, 184, 255, 0.3);
+      font-size:14px;
       color:#eaf4ff;
-      background:rgba(255,255,255,0.05);
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.1), rgba(123, 92, 255, 0.1));
+      transition: all 0.3s ease;
+      cursor: pointer;
+      font-weight: 500;
+      position: relative;
+      z-index: 1;
+    }
+
+    .browse-label:hover {
+      background: linear-gradient(135deg, rgba(107, 184, 255, 0.2), rgba(123, 92, 255, 0.2));
+      border-color: rgba(107, 184, 255, 0.5);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 20px rgba(107, 184, 255, 0.2);
     }
 
     /* Buttons */
@@ -115,116 +227,269 @@
       align-items:center;
       justify-content:center;
       gap:8px;
-      padding:12px 18px;
-      border-radius:10px;
+      padding:13px 22px;
+      border-radius:12px;
       border:0;
       cursor:pointer;
-      font-weight:600;
+      font-weight:700;
       font-size:14px;
       color:#fff;
-      background: linear-gradient(90deg,#6bb8ff,#7b5cff);
-      box-shadow: 0 8px 18px rgba(75,50,150,0.12);
-      transition: transform 160ms ease, box-shadow 160ms ease;
+      background: linear-gradient(135deg,#6bb8ff 0%,#7b5cff 100%);
+      box-shadow: 0 8px 24px rgba(107, 184, 255, 0.25),
+                  0 0 0 1px rgba(255,255,255,0.1),
+                  inset 0 1px 0 rgba(255,255,255,0.2);
+      transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
+      position: relative;
+      overflow: hidden;
     }
+
+    .btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255,255,255,0.2);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.5s ease, height 0.5s ease;
+    }
+
+    .btn:hover::before {
+      width: 300px;
+      height: 300px;
+    }
+
     .btn.secondary {
-      background: rgba(255,255,255,0.06);
+      background: linear-gradient(135deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
       color: #dff1ff;
-      box-shadow:none;
-      border: 1px solid rgba(255,255,255,0.03);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.15),
+                  0 0 0 1px rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .btn:active{ transform: translateY(1px); }
-    .btn:hover{ transform: translateY(-4px); box-shadow: 0 20px 40px rgba(20,40,80,0.12); }
 
-    .controls { display:flex; gap:12px; align-items:center; margin-top:16px; }
+    .btn.secondary:hover {
+      background: linear-gradient(135deg, rgba(255,255,255,0.12), rgba(255,255,255,0.06));
+      border-color: rgba(255,255,255,0.15);
+    }
 
-    .status-small{ font-size:13px; color:rgba(230,238,248,0.65); margin-left:auto }
+    .btn:active{ transform: translateY(1px) scale(0.98); }
+    .btn:hover{ 
+      transform: translateY(-4px) scale(1.02); 
+      box-shadow: 0 12px 32px rgba(107, 184, 255, 0.35),
+                  0 0 0 1px rgba(255,255,255,0.15);
+    }
+
+    .btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none !important;
+    }
+
+    .controls { display:flex; gap:14px; align-items:center; margin-top:20px; }
+
+    .status-small{ 
+      font-size:13px; 
+      color:rgba(230,238,248,0.7); 
+      margin-left:auto;
+      padding: 6px 12px;
+      background: rgba(0,0,0,0.2);
+      border-radius: 8px;
+      font-weight: 500;
+    }
 
     /* Summary area */
     .summary {
-      margin-top:18px;
-      background: rgba(2,8,20,0.3);
-      border-radius:10px;
-      padding:14px;
-      max-height:260px;
+      margin-top:20px;
+      background: linear-gradient(135deg, rgba(2,8,20,0.4), rgba(2,8,20,0.3));
+      backdrop-filter: blur(10px);
+      border-radius:12px;
+      padding:18px;
+      max-height:280px;
       overflow:auto;
       color:#e9f5ff;
       font-size:14px;
-      line-height:1.5;
+      line-height:1.6;
       display:none;
-      animation: fadeIn 320ms ease both;
+      animation: fadeIn 400ms ease both;
+      border: 1px solid rgba(255,255,255,0.05);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.05);
+    }
+
+    .summary::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    .summary::-webkit-scrollbar-track {
+      background: rgba(0,0,0,0.2);
+      border-radius: 4px;
+    }
+
+    .summary::-webkit-scrollbar-thumb {
+      background: rgba(107, 184, 255, 0.3);
+      border-radius: 4px;
+    }
+
+    .summary::-webkit-scrollbar-thumb:hover {
+      background: rgba(107, 184, 255, 0.5);
     }
 
     .download-row{
       display:flex;
       justify-content:space-between;
       align-items:center;
-      margin-top:10px;
-      gap:12px;
+      margin-top:14px;
+      gap:14px;
       display:none;
+      animation: slideInUp 400ms ease both;
     }
-    .download-row .small{font-size:13px;color:rgba(230,238,248,0.72)}
+    .download-row .small{font-size:13px;color:rgba(230,238,248,0.75);font-weight: 500}
+
+    @keyframes slideInUp {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* Right side panel */
     .side {
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.015));
-      border-radius:12px;
-      padding:18px;
-      min-height:420px;
-      box-shadow: 0 10px 30px rgba(2,6,23,0.4);
-      animation: slideInRight 420ms ease both;
+      background: linear-gradient(135deg, rgba(255,255,255,0.04), rgba(255,255,255,0.02));
+      backdrop-filter: blur(16px);
+      border-radius:16px;
+      padding:20px;
+      min-height:480px;
+      box-shadow: 0 20px 60px rgba(2,6,23,0.6),
+                  0 0 0 1px rgba(255,255,255,0.05);
+      animation: slideInRight 500ms ease both;
       display:flex;
       flex-direction:column;
-      gap:14px;
+      gap:16px;
+      border: 1px solid rgba(255,255,255,0.04);
+      transition: all 0.3s ease;
+    }
+
+    .side:hover {
+      box-shadow: 0 25px 70px rgba(2,6,23,0.8),
+                  0 0 0 1px rgba(123, 92, 255, 0.15);
+      transform: translateY(-2px);
     }
 
     .side-block{
-      background:rgba(0,0,0,0.22);
-      border-radius:10px;
-      padding:12px 12px 14px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.25), rgba(0,0,0,0.2));
+      backdrop-filter: blur(10px);
+      border-radius:12px;
+      padding:16px;
+      border: 1px solid rgba(255,255,255,0.03);
+      transition: all 0.3s ease;
     }
 
-    .side .title { font-size:18px; font-weight:700; color:#eaf4ff; margin-bottom:8px }
-    .side .desc { color: rgba(230,238,248,0.78); font-size:13px; margin-bottom:14px }
+    .side-block:hover {
+      background: linear-gradient(135deg, rgba(0,0,0,0.3), rgba(0,0,0,0.25));
+      border-color: rgba(255,255,255,0.06);
+      transform: translateY(-1px);
+    }
 
-    label.muted-compact{ color: rgba(230,238,248,0.8); font-size:13px; display:block; margin-bottom:6px }
+    .side .title { 
+      font-size:19px; 
+      font-weight:700; 
+      color:#fff; 
+      margin-bottom:10px;
+      letter-spacing: -0.3px;
+      text-shadow: 0 2px 10px rgba(123, 92, 255, 0.2);
+    }
+    .side .desc { 
+      color: rgba(230,238,248,0.8); 
+      font-size:13px; 
+      margin-bottom:16px;
+      line-height: 1.5;
+    }
+
+    label.muted-compact{ 
+      color: rgba(230,238,248,0.85); 
+      font-size:13px; 
+      display:block; 
+      margin-bottom:8px;
+      font-weight: 600;
+    }
 
     select, input[type="text"]{
       width:100%;
-      padding:10px 10px;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,0.06);
-      background:rgba(0,0,0,0.12);
+      padding:11px 12px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,0.08);
+      background: linear-gradient(135deg, rgba(0,0,0,0.15), rgba(0,0,0,0.1));
       color: #e9f5ff;
       font-size:14px;
       outline:none;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
     }
 
-    .qa-box { display:flex; flex-direction:column; gap:10px }
-    textarea#answerBox { resize:none; min-height:140px; padding:12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background:rgba(0,0,0,0.12); color:#eef9ff; font-size:14px }
-    input#questionInput { padding:10px; border-radius:8px }
+    select:focus, input[type="text"]:focus {
+      border-color: rgba(107, 184, 255, 0.4);
+      background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15));
+      box-shadow: 0 0 0 3px rgba(107, 184, 255, 0.1),
+                  0 4px 12px rgba(107, 184, 255, 0.15);
+    }
+
+    select:hover, input[type="text"]:hover {
+      border-color: rgba(255,255,255,0.15);
+    }
+
+    .qa-box { display:flex; flex-direction:column; gap:12px }
+    
+    input#questionInput { 
+      padding:11px 12px; 
+      border-radius:10px;
+    }
 
     .answer-result{
-      margin-top:10px;
-      background: rgba(0,0,0,0.14);
-      padding:12px;
-      border-radius:8px;
-      min-height:80px;
+      margin-top:12px;
+      background: linear-gradient(135deg, rgba(0,0,0,0.2), rgba(0,0,0,0.15));
+      backdrop-filter: blur(10px);
+      padding:14px;
+      border-radius:10px;
+      min-height:90px;
       color:#eaf4ff;
       font-size:14px;
       display:none;
+      border: 1px solid rgba(255,255,255,0.05);
+      line-height: 1.6;
+      animation: fadeIn 400ms ease both;
     }
 
-    .muted-compact{ color: rgba(230,238,248,0.6); font-size:13px }
+    .muted-compact{ 
+      color: rgba(230,238,248,0.65); 
+      font-size:13px;
+      line-height: 1.5;
+    }
 
     @media (max-width:1000px){
       .grid{ grid-template-columns: 1fr; }
-      .side{ order:2; margin-top:12px }
+      .side{ order:2; margin-top:16px }
     }
 
-    @keyframes slideInLeft { from{ transform: translateX(-12px); opacity:0 } to{ transform:none; opacity:1 } }
-    @keyframes slideInRight { from{ transform: translateX(12px); opacity:0 } to{ transform:none; opacity:1 } }
-    @keyframes floatIn { from{ opacity:0; transform:translateY(-20px) } to{ opacity:1; transform:none } }
-    @keyframes fadeIn { from{ opacity:0 } to{ opacity:1 } }
+    @keyframes slideInLeft { 
+      from{ transform: translateX(-20px); opacity:0 } 
+      to{ transform:none; opacity:1 } 
+    }
+    @keyframes slideInRight { 
+      from{ transform: translateX(20px); opacity:0 } 
+      to{ transform:none; opacity:1 } 
+    }
+    @keyframes floatIn { 
+      from{ opacity:0; transform:translateY(-30px) scale(0.95) } 
+      to{ opacity:1; transform:none } 
+    }
+    @keyframes fadeIn { 
+      from{ opacity:0; transform: scale(0.98) } 
+      to{ opacity:1; transform: scale(1) } 
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to   { transform: rotate(360deg); }
+    }
   </style>
 </head>
 <body>
@@ -234,36 +499,27 @@
       <p>Upload your PDF/PPT/DOCX, build a local retrieval index, generate headlines + conclusion, and ask targeted questions.</p>
     </header>
 
-
-<!-- Global loading overlay -->
-<div id="loadingOverlay"
-     style="
-       position: fixed;
-       top:0; left:0;
-       width:100%; height:100%;
-       background: rgba(0,0,0,0.55);
-       backdrop-filter: blur(4px);
-       display:none;
-       align-items:center;
-       justify-content:center;
-       z-index:9999;">
-  <div style="
-        width:60px;height:60px;
-        border:6px solid rgba(255,255,255,0.2);
-        border-top-color:#7b5cff;
-        border-radius:50%;
-        animation: spin 0.8s linear infinite;">
-  </div>
-</div>
-
-<style>
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to   { transform: rotate(360deg); }
-}
-</style>
-
-
+    <!-- Global loading overlay -->
+    <div id="loadingOverlay"
+         style="
+           position: fixed;
+           top:0; left:0;
+           width:100%; height:100%;
+           background: rgba(0,0,0,0.75);
+           backdrop-filter: blur(8px);
+           display:none;
+           align-items:center;
+           justify-content:center;
+           z-index:9999;">
+      <div style="
+            width:70px;height:70px;
+            border:6px solid rgba(107, 184, 255, 0.2);
+            border-top-color:#6bb8ff;
+            border-radius:50%;
+            animation: spin 0.8s linear infinite;
+            box-shadow: 0 0 30px rgba(107, 184, 255, 0.3);">
+      </div>
+    </div>
 
     <main class="grid">
       <!-- LEFT: Upload / generate / summary -->
@@ -277,7 +533,7 @@
             <div class="dz-title">Drag & drop a file here</div>
             <div class="dz-sub">Supported: PDF, PPT, PPTX, DOCX, TXT</div>
             <div id="fileName" class="dz-file">No file selected</div>
-            <label for="fileInput" class="browse-label">Browse file…</label>
+            <label for="fileInput" class="browse-label" onclick="event.stopPropagation()">Browse file…</label>
             <input id="fileInput" type="file" name="file" style="display:none" />
           </div>
 
@@ -431,11 +687,11 @@
         body: JSON.stringify({ filepath: currentFilepath, prefix: currentPrefix })
       });
       const idj = await idx.json();
-      if (!idj.ok) { statusText.textContent = 'Indexing failed'; generateBtn.disabled = false; return; }
+      if (!idj.ok) { statusText.textContent = 'Indexing failed'; generateBtn.disabled = false; hideLoading(); return; }
       statusText.textContent = `Indexed ${idj.chunks} chunks. Generating summary...`;
     } catch (e) {
       console.error(e);
-      statusText.textContent = 'Indexing error'; generateBtn.disabled = false; return;
+      statusText.textContent = 'Indexing error'; generateBtn.disabled = false; hideLoading(); return;
     }
 
     // 2. summarize
@@ -446,7 +702,7 @@
         body: JSON.stringify({ prefix: currentPrefix, model: currentModel, top_k: 8, save: true })
       });
       const sj = await s.json();
-      if (!sj.ok) { statusText.textContent = 'Summarization failed'; generateBtn.disabled=false; return; }
+      if (!sj.ok) { statusText.textContent = 'Summarization failed'; generateBtn.disabled=false; hideLoading(); return; }
       summaryBox.style.display = 'block';
       summaryBox.textContent = sj.summary || sj.summary_text || JSON.stringify(sj, null, 2);
       downloadRow.style.display = 'flex';
@@ -503,13 +759,13 @@
     }
   });
 
-
   function showLoading() {
-  document.getElementById('loadingOverlay').style.display = 'flex';
-}
-function hideLoading() {
-  document.getElementById('loadingOverlay').style.display = 'none';
-}
+    document.getElementById('loadingOverlay').style.display = 'flex';
+  }
+  
+  function hideLoading() {
+    document.getElementById('loadingOverlay').style.display = 'none';
+  }
 
   clearQBtn.addEventListener('click', () => {
     questionInput.value='';
